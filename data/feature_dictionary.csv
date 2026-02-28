@@ -1,0 +1,99 @@
+feature,description
+perplexity,"ESM-IF inverse folding perplexity — how ""surprised"" the structure-conditioned language model is by the sequence. Lower = sequence fits structure better."
+avg_log_likelihood,ESM-IF mean log-likelihood per residue. Higher (less negative) = better sequence-structure compatibility.
+molecular_weight,Total molecular weight in Daltons.
+aromaticity,"Fraction of aromatic residues (Phe, Trp, Tyr)."
+instability_index,Guruprasad instability index. >40 = predicted unstable in vitro.
+isoelectric_point,Theoretical pI — pH at which net charge is zero.
+helix,Fraction of residues in alpha-helix (DSSP secondary structure).
+turn,Fraction of residues in turns.
+sheet,Fraction of residues in beta-sheet/strand.
+gravy,"Grand Average of Hydropathy (Kyte-Doolittle). Positive = hydrophobic, negative = hydrophilic."
+arginine_r_charge,Count of positively charged Arg residues.
+lysine_k_charge,Count of positively charged Lys residues.
+aspartate_d_charge,Count of negatively charged Asp residues.
+glutamate_e_charge,Count of negatively charged Glu residues.
+native_net_charge,Net charge at pH 7.0 (positive charges minus negative charges).
+t40_raw,Predicted fraction of residues retaining structure at 40C.
+t45_raw,Predicted fraction retaining structure at 45C.
+t50_raw,Predicted fraction retaining structure at 50C.
+t55_raw,Predicted fraction retaining structure at 55C.
+t60_raw,Predicted fraction retaining structure at 60C.
+t65_raw,Predicted fraction retaining structure at 65C.
+t70_raw,Predicted fraction retaining structure at 70C.
+t75_raw,Predicted fraction retaining structure at 75C.
+t80_raw,Predicted fraction retaining structure at 80C.
+thermophilicity_num,"Predicted thermophilicity class: 0=mesophilic, 1=undetermined, 2=thermophilic, 3=hyperthermophilic."
+clash_binary,"Whether the predicted structure has steric clashes (1=yes, 0=no)."
+triad_found_bin,"Whether the conserved catalytic Asp triad (YXDD motif) was found (1=yes, 0=no)."
+D1_D2_dist,Distance (Angstroms) between 1st and 2nd catalytic Asp residues.
+D2_D3_dist,Distance (Angstroms) between 2nd and 3rd catalytic Asp residues.
+triad_best_rmsd,RMSD (Angstroms) of the best-fit Asp triad geometry vs reference HIV-RT. Lower = more similar to known active RT.
+n_hydrophobic_contacts,Total hydrophobic contacts in structure.
+n_salt_bridges,Total salt bridges.
+n_hbonds,Total hydrogen bonds.
+hydrophobic_per_res,Hydrophobic contacts per residue.
+salt_per_res,Salt bridges per residue.
+hbonds_per_res,Hydrogen bonds per residue.
+pocket_hydrophobic,Hydrophobic contacts in the active-site pocket.
+pocket_salt_bridges,Salt bridges in the active-site pocket.
+pocket_hbonds,Hydrogen bonds in the active-site pocket.
+pocket_hydrophobic_per_res,Pocket hydrophobic contacts per pocket residue.
+pocket_hbonds_per_res,Pocket H-bonds per pocket residue.
+whole_hydrophobic_fraction,Fraction of hydrophobic residues across entire protein.
+whole_mean_hydrophobicity,Mean Kyte-Doolittle hydrophobicity across all residues.
+whole_std_hydrophobicity,Standard deviation of hydrophobicity — measures hydrophobic patterning.
+yxdd_hydrophobic_fraction,Fraction of hydrophobic residues near the YXDD catalytic motif.
+yxdd_mean_hydrophobicity,Mean hydrophobicity near the YXDD motif.
+hairpin_pass,"Whether a beta-hairpin near the active site was found (1=yes, 0=no)."
+best_confidence,Confidence score of the best beta-hairpin detection.
+best_s1_len,Length of strand 1 in the best beta-hairpin.
+best_turn_len,Length of the turn connecting the two hairpin strands.
+best_s2_len,Length of strand 2 in the best beta-hairpin.
+n_strands_total,Total number of beta-strands in the structure.
+n_hairpins_found,Number of beta-hairpins detected.
+pct_E,Percentage of residues in extended/beta-strand conformation (DSSP E).
+pct_H,Percentage of residues in helical conformation (DSSP H).
+thumb_total_residues,Number of residues in the thumb subdomain (aligned to HIV-RT thumb).
+thumb_surface_residues,Surface-exposed residues in the thumb domain.
+thumb_surface_positive,Positively charged surface residues on thumb.
+thumb_surface_negative,Negatively charged surface residues on thumb.
+thumb_surface_net_charge,Net charge of the thumb domain surface.
+thumb_charge_ratio,Ratio of positive to negative surface charges on thumb.
+thumb_fident,Sequence identity (fraction) of thumb domain alignment to HIV-RT.
+thumb_charge_class_num,"Thumb charge class: -1=negative, 0=neutral, 1=positive."
+has_dgr_motif,"Whether a Diversity-Generating Retroelement (DGR) motif was found (1=yes, 0=no)."
+ramachandran_favoured,Percentage of residues in Ramachandran-favoured regions.
+ramachandran_allowed,Percentage in Ramachandran-allowed regions.
+ramachandran_outliers,Percentage Ramachandran outliers (higher = worse structure quality).
+g_factor_dihedrals,Procheck G-factor for dihedral angles (higher = better quality).
+g_factor_covalent,Procheck G-factor for covalent geometry.
+g_factor_overall,Procheck overall G-factor. Values < -0.5 indicate problematic structures.
+camsol_score,"CamSol intrinsic solubility score — positive = soluble, negative = aggregation-prone."
+camsol_mean_profile,Mean per-residue CamSol solubility profile across the full sequence.
+camsol_min_profile,Minimum per-residue CamSol score — identifies the least soluble region.
+camsol_frac_poor,Fraction of residues with poor solubility (CamSol profile < -1).
+camsol_frac_good,Fraction of residues with good solubility (CamSol profile > 1).
+sasa_total,Total solvent-accessible surface area (Å²) of 20 active-site residues.
+sasa_avg,Average SASA per active-site residue.
+sasa_high_pct,Percentage of active-site residues with high solvent exposure.
+sasa_medium_pct,Percentage of active-site residues with medium solvent exposure.
+sasa_low_pct,Percentage of active-site residues with low solvent exposure (buried).
+yxdd_y_is_strand,"Whether the Y residue of YXDD catalytic motif is in beta-strand (1=yes, 0=no). Canonical active geometry."
+yxdd_x_is_turn,"Whether the X residue of YXDD motif is in a turn (1=yes, 0=no)."
+yxdd_d1_is_turn,"Whether the first D of YXDD motif is in a turn (1=yes, 0=no)."
+yxdd_d2_is_strand,"Whether the second D of YXDD motif is in beta-strand (1=yes, 0=no). Canonical active geometry."
+qg_motif_found,"Whether the conserved QG motif was found in the structure (1=yes, 0=no)."
+sp_motif_found,"Whether the conserved SP motif was found in the structure (1=yes, 0=no)."
+sp_s_is_helix,"Whether the S residue of SP motif is in alpha-helix (1=yes, 0=no)."
+sp_p_is_helix,"Whether the P residue of SP motif is in alpha-helix (1=yes, 0=no)."
+foldseek_best_TM,Best TM-score to any of 25+ reference RT structures (FoldSeek). Higher = more structurally similar.
+foldseek_best_LDDT,Best lDDT score to any reference RT structure. Measures local distance accuracy.
+foldseek_best_fident,Best fractional sequence identity to any reference from FoldSeek alignment.
+foldseek_TM_HIV1,Best TM-score to HIV-1 RT reference structures.
+foldseek_TM_MMLV,Best TM-score to MMLV RT reference structures (the gold-standard PE RT).
+foldseek_TM_MMLVPE,Best TM-score to MMLV prime editor complex structures.
+foldseek_TM_Retron,Best TM-score to Retron RT reference structures.
+foldseek_TM_LTRRetrotransposon,Best TM-score to LTR retrotransposon RT reference structures.
+foldseek_TM_Group2Intron,Best TM-score to Group II Intron RT reference structures.
+foldseek_TM_Telomerase,Best TM-score to Telomerase RT reference structures.

@@ -1,0 +1,8 @@
+family,n_samples,n_active,n_inactive,rt_names
+CRISPR-associated,5,0,5,A.platensis-Cas1-RT|CRISPRRT2-RT|FuRT-Cas1-RT|Med-CasRT|ROSE-CRISPR-RT
+Group_II_Intron,5,2,3,Er-RT|GroupII_CLA-RT|Gs-RT|LtrA-RT|Tel4c-RT
+LTR_Retrotransposon,11,2,9,Bel-RT|CHLRE|FoxC-RT|Gate-RT|Gypsy-RT|Line1-RT|Ngaro-RT|Tf1-RT|Ty1B-RT|Ty3-RT|Tyrosinerecomb-RT
+Other,5,0,5,Abi-RT|CaMV-RT|DRG2-RT|Drg-RT|TCDM_11122-RT
+Retron,12,5,7,"Ec48-RT|Ec67-RT|Mx65-RT|Ne144-RT|Retron86-RT|Rs-RT|SEN1-RT|Sau1-RT|Thr-RT|Vc95-RT|Vp96-RT|retronE,coli-RT"
+Retroviral,18,12,6,ASLV-RT|AVIRE-RT|BAEMV-RT|BLV-RT|FENV1-RT|GALV-RT|HIVpol+MMLVRNaseH_RT|IPMA-RT|KORV-RT|MMLV-RT|MMTV-RT|MPMV-RT|PERV-RT|POL11ERV-RT|RSVSB-RT|SRV2-RT|WDSV-RT|WMSV-RT
+Unclassified,1,0,1,AFY36037.1-RT
