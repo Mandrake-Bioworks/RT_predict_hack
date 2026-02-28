@@ -12,7 +12,7 @@ The dataset comes from [Doman et al. (2023)](https://doi.org/10.1038/s41587-023-
 
 ## Why This Is Hard
 
-This looks like a simple binary classification problem (57 samples, 70 features). It isn't. The dataset has pathologies that will eat naive approaches alive:
+This looks like a simple binary classification problem (57 samples, 98 features). It isn't. The dataset has pathologies that will eat naive approaches alive:
 
 ### Failure Mode 1: Family Memorization
 The 57 RTs come from 7 evolutionary families. **The active/inactive ratio is completely confounded with family membership.** Retroviral RTs are mostly active (12/18). Non-retroviral families are mostly inactive. A model that learns "Retroviral → active" gets ~75% accuracy but has learned **nothing** about what makes an RT work. It will fail on any novel RT family.
@@ -33,11 +33,11 @@ Three families (CRISPR-associated, Other, Unclassified) have zero active members
 ```
 data/
 ├── rt_sequences.csv          # 57 RTs: name, sequence, active, PE efficiency, family
-├── handcrafted_features.csv  # 98 biophysical features per RT (70 original + 28 new)
-├── new_features.csv          # The 28 new features separately (CamSol, SASA, Motif SS, FoldSeek)
+├── handcrafted_features.csv  # 98 biophysical features per RT
 ├── esm2_embeddings.npz       # ESM-2 1280-dim mean-pooled embeddings
 ├── family_splits.csv         # Family membership and class balance
-└── feature_dictionary.csv    # What each of the 98 features means
+├── feature_dictionary.csv    # What each of the 98 features means
+└── structures/               # AlphaFold2/ESMFold predicted 3D structures (57 PDB files)
 ```
 
 ### rt_sequences.csv
@@ -62,7 +62,7 @@ data/
 | Unclassified | 1 | 0 | 1 | Single sample |
 
 ### handcrafted_features.csv
-98 biophysical features computed from predicted structures (AlphaFold2/ESMFold) and sequences. Grouped into 15 categories:
+98 handcrafted biophysical features computed from predicted structures (AlphaFold2/ESMFold) and sequences. These are the result of extensive feature engineering for feature-rich extraction. Grouped into 15 categories:
 
 | Group | # Features | Description |
 |---|---|---|
@@ -83,6 +83,9 @@ data/
 | FoldSeek Structural Alignment | 10 | TM-scores and lDDT from FoldSeek alignment against 25+ reference RT crystal structures, per reference family |
 
 See `feature_dictionary.csv` for detailed per-feature descriptions.
+
+### structures/
+AlphaFold2/ESMFold predicted 3D structures for all 57 RT enzymes in PDB format. These structures were used to compute the structural biophysical features in `handcrafted_features.csv` (e.g., Asp triad geometry, contacts, SASA, hairpin detection, thumb domain analysis, FoldSeek alignments, Procheck validation, and motif secondary structure assignments).
 
 **Missing values**: Some structural features have NaN for RTs where the structural analysis pipeline failed (e.g., no thumb domain detected, no YXDD motif found, no PDB structure available for Line1-RT). Missing ≠ zero — handle accordingly.
 
@@ -148,20 +151,6 @@ We've extensively tested approaches. Here are the results on leave-one-family-ou
 - `baselines/baseline_rf.py` — Random Forest on handcrafted features (F1=0.533)
 - `evaluation/evaluate.py` — Standard evaluation script; pass it your predictions CSV
 
-## What We Think Might Work (But Haven't Cracked)
-
-1. **Better feature engineering**: our 98 features (including structural alignment, solubility, and motif geometry) are a starting point. Features specifically capturing RT-DNA/RNA interaction interfaces, processivity-related structural motifs, or template-switching geometry might break the family barrier.
-
-2. **Multi-task learning**: jointly predict activity + PE efficiency + thermostability. The regression signal from PE efficiency might regularize the classifier.
-
-3. **Protein language model fine-tuning**: instead of using frozen ESM-2 embeddings, fine-tune a small PLM head on the 57 RTs. The key is preventing it from learning family identity — perhaps adversarial training against a family classifier.
-
-4. **Graph neural networks on structure**: the predicted 3D structures are available. Contact-graph-based features might capture active-site geometry better than our summary statistics.
-
-5. **Cross-dataset transfer**: the EVOLVEpro dataset has MMLV mutant fitness data. Khan & Buffington (2024) have additional RT characterizations. Pretraining on related tasks might help.
-
-6. **Pairwise ranking with careful pair construction**: within-family pairs teach "what makes one RT better than another in the same context." The challenge is threshold calibration when applying to new families.
-
 ## Submission Format
 
 Submit a CSV with columns: `rt_name`, `predicted_active`, `predicted_score`
@@ -184,11 +173,11 @@ rt-predict-benchmark/
 ├── README.md                      # This file
 ├── data/
 │   ├── rt_sequences.csv           # Sequences + labels + families
-│   ├── handcrafted_features.csv   # 98 biophysical features (original 70 + 28 new)
-│   ├── new_features.csv           # 28 new features standalone (CamSol, SASA, Motif SS, FoldSeek)
+│   ├── handcrafted_features.csv   # 98 handcrafted biophysical features
 │   ├── esm2_embeddings.npz        # ESM-2 1280-dim embeddings
 │   ├── family_splits.csv          # Family definitions
-│   └── feature_dictionary.csv     # Feature descriptions
+│   ├── feature_dictionary.csv     # Feature descriptions
+│   └── structures/                # 57 predicted 3D structures (PDB format)
 ├── baselines/
 │   └── baseline_rf.py             # Reference baseline implementation
 ├── evaluation/
