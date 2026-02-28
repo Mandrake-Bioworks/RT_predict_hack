@@ -15,9 +15,9 @@ The dataset comes from [Doman et al. (2023)](https://doi.org/10.1038/s41587-023-
 This looks like a simple binary classification problem (57 samples, 98 features). It isn't. The dataset has pathologies that will eat naive approaches alive:
 
 ### Failure Mode 1: Family Memorization
-The 57 RTs come from 7 evolutionary families. **The active/inactive ratio is completely confounded with family membership.** Retroviral RTs are mostly active (12/18). Non-retroviral families are mostly inactive. A model that learns "Retroviral → active" gets ~75% accuracy but has learned **nothing** about what makes an RT work. It will fail on any novel RT family.
+The 57 RTs come from 7 evolutionary families. **The active/inactive ratio is heavily confounded with family membership.** Retroviral RTs are mostly active (12/18). Non-retroviral families are mostly inactive. A model that learns "Retroviral → active" gets ~75% accuracy but may have learned family identity rather than the underlying biophysics of what makes an RT work.
 
-**Your model must generalize across families, not memorize them.** The primary evaluation is **leave-one-family-out cross-validation**.
+**The goal is to ensure your model's performance isn't purely explained by family distribution.** We use leave-one-family-out cross-validation as a sanity check alongside standard evaluation — not as the only metric, but as evidence that the model has learned something real.
 
 ### Failure Mode 2: Class Imbalance Masking
 21 active, 36 inactive. A model that predicts "inactive" for everything gets 63% accuracy. **Do not report accuracy alone. F1 on the positive class is what matters.**
@@ -103,7 +103,9 @@ embeddings = data['embeddings']  # (57, 1280) float32
 
 ## Evaluation Protocol
 
-### Primary Metric: Leave-One-Family-Out F1
+We care about two things: **(1) does the model actually learn biophysical determinants of RT activity, rather than just memorizing family identity?** and **(2) does the model perform well in practice?** These are complementary goals, not competing ones.
+
+### Leave-One-Family-Out (LOFO) Cross-Validation
 
 ```
 For each of the 7 families:
@@ -116,17 +118,22 @@ Aggregate all predictions across all 7 folds.
 Report: F1 (positive class), AUC-ROC, TP, FP, FN, TN
 ```
 
-**This is the metric that matters.** It tests whether your model can generalize to an entirely unseen evolutionary lineage.
+LOFO tests whether your model can generalize to an entirely unseen evolutionary lineage. We use this primarily as a **sanity check** — to make sure good results aren't simply explained by the model learning "Retroviral → active, everything else → inactive." A model that performs well on LOFO has clearly learned something beyond family distribution.
 
-### Secondary Metric: Leave-One-Out CV (within-distribution)
-Standard LOO-CV across all 57 RTs. This measures within-distribution performance but is easy to overfit by learning family identity.
+That said, **we are not dogmatic about LOFO being the only metric.** Learning family-specific biophysical patterns is real biology, not cheating. A model that learns "within Retroviral RTs, these structural features distinguish active from inactive" has learned something genuinely useful — even if that knowledge doesn't transfer perfectly to CRISPR-associated RTs.
 
-### Tertiary Metric: Ranking Quality
+### Within-Family / Leave-One-Out CV
+
+Standard LOO-CV across all 57 RTs. This measures within-distribution performance, including the ability to discriminate active from inactive RTs within the same family. Strong within-family performance is valuable — it means the model captures family-specific determinants of activity, which is practically useful for screening novel RTs from known families.
+
+**Caveat**: LOO-CV alone can be inflated by family memorization, which is why we ask for both LOO and LOFO results.
+
+### Ranking Quality
 For the 21 active RTs, how well does your predicted score rank them by actual PE efficiency? Report Spearman's ρ and Kendall's τ.
 
 ### Rules
-1. **No family leakage**: your model must not see any member of the held-out family during training (including for normalization, PCA, etc.)
-2. **Report the Retroviral fold separately**: this is the fold that exposes real generalization. TP/12 on this fold is the most informative single number.
+1. **Report both LOFO and LOO-CV**: we want to see how the model performs across families *and* within them. Neither metric alone tells the full story.
+2. **Report the Retroviral fold separately**: this is the hardest LOFO fold. TP/12 on this fold is the most informative single number for cross-family generalization.
 3. **External data is allowed**: you may use additional protein databases, language model embeddings, structural predictions, etc. But you must describe what you used.
 4. **No manual curation of predictions**: the pipeline must be fully automated and reproducible.
 
