@@ -1,0 +1,5 @@
+rt_name,predicted_active,predicted_score
+RT_001,1,0.92
+RT_002,0,0.15
+RT_003,1,0.78
+RT_004,0,0.33
